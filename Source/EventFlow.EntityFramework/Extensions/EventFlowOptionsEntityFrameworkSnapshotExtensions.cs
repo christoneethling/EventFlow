@@ -1,6 +1,6 @@
-// The MIT License (MIT)
+﻿// The MIT License (MIT)
 // 
-// Copyright (c) 2015-2025 Rasmus Mikkelsen
+// Copyright (c) 2015-2024 Rasmus Mikkelsen
 // https://github.com/eventflow/EventFlow
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -19,13 +19,19 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+using EventFlow.EntityFramework.SnapshotStores;
+using EventFlow.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EventFlow.EntityFramework
+namespace EventFlow.EntityFramework.Extensions;
+
+public static class EventFlowOptionsEntityFrameworkSnapshotExtensions
 {
-    public interface IEntityFrameworkConfiguration
+    public static IEventFlowOptions UseEntityFrameworkSnapshotStore<TDbContext>(this IEventFlowOptions eventFlowOptions)
+        where TDbContext : DbContext
     {
-        void Apply(IServiceCollection serviceCollection);
+        return eventFlowOptions
+            .UseSnapshotPersistence<EntityFrameworkSnapshotPersistence<TDbContext>>(ServiceLifetime.Transient);
     }
 }

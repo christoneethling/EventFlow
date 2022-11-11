@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 // 
-// Copyright (c) 2015-2025 Rasmus Mikkelsen
+// Copyright (c) 2015-2024 Rasmus Mikkelsen
 // https://github.com/eventflow/EventFlow
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -19,9 +19,9 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,131 +30,150 @@ using EventFlow.Core;
 using EventFlow.EntityFramework.Extensions;
 using EventFlow.EventStores;
 using EventFlow.Exceptions;
-using EventFlow.Logs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-namespace EventFlow.EntityFramework.EventStores
+namespace EventFlow.EntityFramework.EventStores;
+
+[SuppressMessage("Code Fix", "Sc0023:Async Suffix")]
+#pragma warning disable Wintellect011
+public class EntityFrameworkEventPersistence<TDbContext> : IEventPersistence
+#pragma warning restore Wintellect011
+    where TDbContext : DbContext
 {
-    public class EntityFrameworkEventPersistence<TDbContext> : IEventPersistence
-        where TDbContext : DbContext
+    private readonly IDbContextProvider<TDbContext> _contextProvider;
+    private readonly ILogger<EntityFrameworkEventPersistence<TDbContext>> _logger;
+    private readonly IUniqueConstraintDetectionStrategy _strategy;
+
+    public EntityFrameworkEventPersistence(ILogger<EntityFrameworkEventPersistence<TDbContext>> logger,
+                                           IDbContextProvider<TDbContext> contextProvider,
+                                           IUniqueConstraintDetectionStrategy strategy)
     {
-        private readonly IDbContextProvider<TDbContext> _contextProvider;
-        private readonly ILog _log;
-        private readonly IUniqueConstraintDetectionStrategy _strategy;
+        _logger = logger;
+        _contextProvider = contextProvider;
+        _strategy = strategy;
+    }
 
-        public EntityFrameworkEventPersistence(
-            ILog log,
-            IDbContextProvider<TDbContext> contextProvider,
-            IUniqueConstraintDetectionStrategy strategy
-        )
+    public async Task<IReadOnlyCollection<ICommittedDomainEvent>> CommitEventsAsync(IIdentity id,
+                                                                                    IReadOnlyCollection<SerializedEvent> serializedEvents,
+                                                                                    CancellationToken cancellationToken)
+    {
+        if (!serializedEvents.Any())
         {
-            _log = log;
-            _contextProvider = contextProvider;
-            _strategy = strategy;
+            return Array.Empty<ICommittedDomainEvent>();
         }
 
-        public async Task<AllCommittedEventsPage> LoadAllCommittedEvents(GlobalPosition globalPosition, int pageSize,
-            CancellationToken cancellationToken)
+        var entities = serializedEvents
+                       .Select((e, _) => new EventEntity
+                                         {
+                                             AggregateId = id.Value,
+                                             AggregateName = e.Metadata[MetadataKeys.AggregateName],
+                                             BatchId = Guid.Parse(e.Metadata[MetadataKeys.BatchId]),
+                                             Data = e.SerializedData,
+                                             Metadata = e.SerializedMetadata,
+                                             AggregateSequenceNumber = e.AggregateSequenceNumber
+                                         })
+                       .ToList();
+
+        _logger.LogTrace(
+                         "Committing {Count} events to EntityFramework event store for entity with ID '{Id}'",
+                         entities.Count,
+                         id);
+
+        try
         {
-            var startPosition = globalPosition.IsStart
-                ? 0
-                : long.Parse(globalPosition.Value);
-
-            using (var context = _contextProvider.CreateContext())
-            {
-                var entities = await context
-                    .Set<EventEntity>()
-                    .OrderBy(e => e.GlobalSequenceNumber)
-                    .Where(e => e.GlobalSequenceNumber >= startPosition)
-                    .Take(pageSize)
-                    .ToListAsync(cancellationToken)
-                    .ConfigureAwait(false);
-
-                var nextPosition = entities.Any()
-                    ? entities.Max(e => e.GlobalSequenceNumber) + 1
-                    : startPosition;
-
-                return new AllCommittedEventsPage(new GlobalPosition(nextPosition.ToString()), entities);
-            }
+            await using var context = _contextProvider.CreateContext();
+            await context.AddRangeAsync(entities, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken)
+                         .ConfigureAwait(false);
+        }
+        catch (DbUpdateException ex) when (ex.IsUniqueConstraintViolation(_strategy))
+        {
+            _logger.LogTrace(ex,
+                             "Entity Framework event insert detected an optimistic concurrency " +
+                             "exception for entity with ID '{Id}'",
+                             id);
+#pragma warning disable Wintellect010
+            throw new OptimisticConcurrencyException(ex.Message, ex);
+#pragma warning restore Wintellect010
         }
 
-        public async Task<IReadOnlyCollection<ICommittedDomainEvent>> CommitEventsAsync(IIdentity id,
-            IReadOnlyCollection<SerializedEvent> serializedEvents, CancellationToken cancellationToken)
-        {
-            if (!serializedEvents.Any())
-                return new ICommittedDomainEvent[0];
+        return entities;
+    }
 
-            var entities = serializedEvents
-                .Select((e, i) => new EventEntity
-                {
-                    AggregateId = id.Value,
-                    AggregateName = e.Metadata[MetadataKeys.AggregateName],
-                    BatchId = Guid.Parse(e.Metadata[MetadataKeys.BatchId]),
-                    Data = e.SerializedData,
-                    Metadata = e.SerializedMetadata,
-                    AggregateSequenceNumber = e.AggregateSequenceNumber
-                })
-                .ToList();
+    public async Task DeleteEventsAsync(IIdentity id, CancellationToken cancellationToken)
+    {
+        await using var context = _contextProvider.CreateContext();
 
-            _log.Verbose(
-                "Committing {0} events to EntityFramework event store for entity with ID '{1}'",
-                entities.Count,
-                id);
+        var entities = await context.Set<EventEntity>()
+                                    .Where(e => e.AggregateId == id.Value)
+                                    .Select(e => new EventEntity { GlobalSequenceNumber = e.GlobalSequenceNumber })
+                                    .ToListAsync(cancellationToken);
 
-            try
-            {
-                using (var context = _contextProvider.CreateContext())
-                {
-                    await context.AddRangeAsync(entities, cancellationToken);
-                    await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-                }
-            }
-            catch (DbUpdateException ex) when (ex.IsUniqueConstraintViolation(_strategy))
-            {
-                _log.Verbose(
-                    "Entity Framework event insert detected an optimistic concurrency " +
-                    "exception for entity with ID '{0}'", id);
-                throw new OptimisticConcurrencyException(ex.Message, ex);
-            }
+        context.RemoveRange(entities);
+        var rowsAffected = await context.SaveChangesAsync(cancellationToken)
+                                        .ConfigureAwait(false);
 
-            return entities;
-        }
+        _logger.LogTrace(
+                         "Deleted entity with ID {Id} by deleting all of its {NumberOfEvents} events",
+                         id,
+                         rowsAffected);
+    }
 
-        public async Task<IReadOnlyCollection<ICommittedDomainEvent>> LoadCommittedEventsAsync(IIdentity id,
-            int fromEventSequenceNumber, CancellationToken cancellationToken)
-        {
-            using (var context = _contextProvider.CreateContext())
-            {
-                var entities = await context
-                    .Set<EventEntity>()
-                    .Where(e => e.AggregateId == id.Value
-                                && e.AggregateSequenceNumber >= fromEventSequenceNumber)
-                    .OrderBy(e => e.AggregateSequenceNumber)
-                    .ToListAsync(cancellationToken)
-                    .ConfigureAwait(false);
+    public async Task<AllCommittedEventsPage> LoadAllCommittedEvents(GlobalPosition globalPosition,
+                                                                     int pageSize,
+                                                                     CancellationToken cancellationToken)
+    {
+        var startPosition = globalPosition.IsStart
+                                ? 0
+                                : long.Parse(globalPosition.Value);
 
-                return entities;
-            }
-        }
+        await using var context = _contextProvider.CreateContext();
 
-        public async Task DeleteEventsAsync(IIdentity id, CancellationToken cancellationToken)
-        {
-            using (var context = _contextProvider.CreateContext())
-            {
-                var entities = await context.Set<EventEntity>()
-                    .Where(e => e.AggregateId == id.Value)
-                    .Select(e => new EventEntity {GlobalSequenceNumber = e.GlobalSequenceNumber})
-                    .ToListAsync(cancellationToken)
-                    .ConfigureAwait(false);
+        var entities = await context
+                             .Set<EventEntity>()
+                             .OrderBy(e => e.GlobalSequenceNumber)
+                             .Where(e => e.GlobalSequenceNumber >= startPosition)
+                             .Take(pageSize)
+                             .ToListAsync(cancellationToken);
 
-                context.RemoveRange(entities);
-                var rowsAffected = await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        var nextPosition = entities.Any()
+                               ? entities.Max(e => e.GlobalSequenceNumber) + 1
+                               : startPosition;
 
-                _log.Verbose(
-                    "Deleted entity with ID '{0}' by deleting all of its {1} events",
-                    id,
-                    rowsAffected);
-            }
-        }
+        return new AllCommittedEventsPage(new GlobalPosition(nextPosition.ToString()), entities);
+    }
+
+    public async Task<IReadOnlyCollection<ICommittedDomainEvent>> LoadCommittedEventsAsync(IIdentity id,
+                                                                                           int fromEventSequenceNumber,
+                                                                                           CancellationToken cancellationToken)
+    {
+        await using var context = _contextProvider.CreateContext();
+
+        var entities = await context
+                             .Set<EventEntity>()
+                             .Where(e => e.AggregateId == id.Value
+                                         && e.AggregateSequenceNumber >= fromEventSequenceNumber)
+                             .OrderBy(e => e.AggregateSequenceNumber)
+                             .ToListAsync(cancellationToken);
+
+        return entities;
+    }
+
+    public async Task<IReadOnlyCollection<ICommittedDomainEvent>> LoadCommittedEventsAsync(IIdentity id,
+                                                                                           int fromEventSequenceNumber,
+                                                                                           int toEventSequenceNumber,
+                                                                                           CancellationToken cancellationToken)
+    {
+        await using var context = _contextProvider.CreateContext();
+
+        var entities = await context
+                             .Set<EventEntity>()
+                             .Where(e => e.AggregateId == id.Value
+                                         && e.AggregateSequenceNumber >= fromEventSequenceNumber && e.AggregateSequenceNumber <= toEventSequenceNumber)
+                             .OrderBy(e => e.AggregateSequenceNumber)
+                             .ToListAsync(cancellationToken);
+
+        return entities;
     }
 }
