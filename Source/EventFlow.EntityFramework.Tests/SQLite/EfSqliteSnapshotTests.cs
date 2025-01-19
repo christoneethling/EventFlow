@@ -1,6 +1,6 @@
-﻿// The MIT License (MIT)
+// The MIT License (MIT)
 // 
-// Copyright (c) 2015-2024 Rasmus Mikkelsen
+// Copyright (c) 2015-2025 Rasmus Mikkelsen
 // https://github.com/eventflow/EventFlow
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -19,19 +19,30 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-using EventFlow.EntityFramework.SnapshotStores;
-using EventFlow.Extensions;
-using Microsoft.EntityFrameworkCore;
+
+using System;
+using EventFlow.EntityFramework.Extensions;
+using EventFlow.EntityFramework.Tests.Model;
+using EventFlow.TestHelpers;
+using EventFlow.TestHelpers.Suites;
 using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
 
-namespace EventFlow.EntityFramework.Extensions;
-
-public static class EventFlowOptionsEntityFrameworkSnapshotExtensions
+namespace EventFlow.EntityFramework.Tests.SQLite
 {
-    public static IEventFlowOptions UseEntityFrameworkSnapshotStore<TDbContext>(this IEventFlowOptions eventFlowOptions)
-        where TDbContext : DbContext
+    [Category(Categories.Integration)]
+    public class EfSqliteSnapshotTests : TestSuiteForSnapshotStore
     {
-        return eventFlowOptions
-            .UseSnapshotPersistence<EntityFrameworkSnapshotPersistence<TDbContext>>(ServiceLifetime.Transient);
+        protected override IServiceProvider Configure(IEventFlowOptions eventFlowOptions)
+        {
+            eventFlowOptions
+                .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
+                .AddDbContextProvider<TestDbContext, SqliteDbContextProvider>(ServiceLifetime.Singleton)
+                .ConfigureForSnapshotStoreTest();
+
+            var serviceProvider = base.Configure(eventFlowOptions);
+
+            return serviceProvider;
+        }
     }
 }

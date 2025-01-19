@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 // 
-// Copyright (c) 2015-2024 Rasmus Mikkelsen
+// Copyright (c) 2015-2025 Rasmus Mikkelsen
 // https://github.com/eventflow/EventFlow
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -21,7 +21,6 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,10 +34,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EventFlow.EntityFramework.EventStores;
 
-[SuppressMessage("Code Fix", "Sc0023:Async Suffix")]
-#pragma warning disable Wintellect011
 public class EntityFrameworkEventPersistence<TDbContext> : IEventPersistence
-#pragma warning restore Wintellect011
     where TDbContext : DbContext
 {
     private readonly IDbContextProvider<TDbContext> _contextProvider;
