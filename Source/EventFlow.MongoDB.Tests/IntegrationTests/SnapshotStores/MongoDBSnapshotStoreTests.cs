@@ -21,11 +21,11 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
+using EphemeralMongo;
 using EventFlow.Configuration;
 using EventFlow.MongoDB.Extensions;
 using EventFlow.TestHelpers;
 using EventFlow.TestHelpers.Suites;
-using Mongo2Go;
 using NUnit.Framework;
 
 namespace EventFlow.MongoDB.Tests.IntegrationTests.SnapshotStores
@@ -33,11 +33,14 @@ namespace EventFlow.MongoDB.Tests.IntegrationTests.SnapshotStores
     [Category(Categories.Integration)]
     public class MongoDBSnapshotStoreTests : TestSuiteForSnapshotStore
     {
-        private MongoDbRunner _runner;
+        private IMongoRunner _runner;
 
         protected override IServiceProvider Configure(IEventFlowOptions eventFlowOptions)
         {
-            _runner = MongoDbRunner.Start();
+            _runner = MongoRunner.Run(new MongoRunnerOptions()
+            {
+                UseSingleNodeReplicaSet = true,
+            });
 
             eventFlowOptions
                 .ConfigureMongoDb(_runner.ConnectionString, "eventflow")
