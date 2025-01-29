@@ -23,7 +23,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EphemeralMongo;
 using EventFlow.Configuration;
 using EventFlow.Extensions;
 using EventFlow.MongoDB.Extensions;
@@ -37,6 +36,7 @@ using EventFlow.TestHelpers.Extensions;
 using EventFlow.TestHelpers.Suites;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Mongo2Go;
 using NUnit.Framework;
 
 namespace EventFlow.MongoDB.Tests.IntegrationTests.ReadStores
@@ -47,14 +47,11 @@ namespace EventFlow.MongoDB.Tests.IntegrationTests.ReadStores
     {
         protected override Type ReadModelType { get; } = typeof(MongoDbThingyReadModel);
 
-        private IMongoRunner _runner;
+        private MongoDbRunner _runner;
 
         protected override IServiceProvider Configure(IEventFlowOptions eventFlowOptions)
         {
-            _runner = MongoRunner.Run(new MongoRunnerOptions()
-            {
-                UseSingleNodeReplicaSet = true,
-            });
+            _runner = MongoDbRunner.Start();
 
             var resolver = eventFlowOptions
                 .RegisterServices(sr => sr.AddTransient(typeof(ThingyMessageLocator)))
