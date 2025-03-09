@@ -15,7 +15,7 @@ on:
       bake-version:
         required: false
         type: string
-        default: '0.30.43-beta'
+        default: '0.37.51'
       environment:
         required: false
         type: string
