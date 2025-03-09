@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
@@ -68,6 +67,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFlow.EntityFramework", "Source\EventFlow.EntityFramework\EventFlow.EntityFramework.csproj", "{ED4AA905-A208-4E67-8B40-CC8E1B8440B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFlow.EntityFramework.Tests", "Source\EventFlow.EntityFramework.Tests\EventFlow.EntityFramework.Tests.csproj", "{02B1E8B4-CC53-4BAB-BC2C-AD0B06760AE2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SourceGenerators", "SourceGenerators", "{91929C7C-D9AE-B5BA-2467-C9FCAEC69696}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFlow.SourceGenerators", "Source\EventFlow.SourceGenerators\EventFlow.SourceGenerators.csproj", "{35098BEA-A0B8-4E63-8D71-35CE5297B459}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFlow.SourceGenerators.Tests", "Source\EventFlow.SourceGenerators.Tests\EventFlow.SourceGenerators.Tests.csproj", "{D8317769-F140-4E5D-9041-19342A3A33BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,6 +164,14 @@ Global
 		{02B1E8B4-CC53-4BAB-BC2C-AD0B06760AE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02B1E8B4-CC53-4BAB-BC2C-AD0B06760AE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02B1E8B4-CC53-4BAB-BC2C-AD0B06760AE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35098BEA-A0B8-4E63-8D71-35CE5297B459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35098BEA-A0B8-4E63-8D71-35CE5297B459}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35098BEA-A0B8-4E63-8D71-35CE5297B459}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35098BEA-A0B8-4E63-8D71-35CE5297B459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8317769-F140-4E5D-9041-19342A3A33BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8317769-F140-4E5D-9041-19342A3A33BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8317769-F140-4E5D-9041-19342A3A33BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8317769-F140-4E5D-9041-19342A3A33BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,6 +205,9 @@ Global
 		{21A29AA0-EF82-4717-89CE-729257C05C7D} = {5EE323DE-E69B-451A-8AC3-22DD6A004FBA}
 		{ED4AA905-A208-4E67-8B40-CC8E1B8440B8} = {21A29AA0-EF82-4717-89CE-729257C05C7D}
 		{02B1E8B4-CC53-4BAB-BC2C-AD0B06760AE2} = {21A29AA0-EF82-4717-89CE-729257C05C7D}
+		{91929C7C-D9AE-B5BA-2467-C9FCAEC69696} = {5EE323DE-E69B-451A-8AC3-22DD6A004FBA}
+		{35098BEA-A0B8-4E63-8D71-35CE5297B459} = {91929C7C-D9AE-B5BA-2467-C9FCAEC69696}
+		{D8317769-F140-4E5D-9041-19342A3A33BD} = {91929C7C-D9AE-B5BA-2467-C9FCAEC69696}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {17607E2C-4E8E-45A2-85BD-0A5808E1C0F3}
