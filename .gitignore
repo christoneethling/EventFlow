@@ -213,3 +213,6 @@ FakesAssemblies/
 
 # mkdocs output
 /docs
+
+# Mac Files
+*.DS_Store
