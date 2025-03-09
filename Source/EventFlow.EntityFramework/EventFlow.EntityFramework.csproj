@@ -1,15 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../Common.props" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <TargetFramework>net8.0</TargetFramework>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <Title>EventFlow.EntityFramework</Title>
     <Authors>Frank Ebersoll</Authors>
     <Company>Rasmus Mikkelsen</Company>
-    <Copyright>Copyright (c) Rasmus Mikkelsen 2015 - 2021</Copyright>
+    <Copyright>Copyright (c) Rasmus Mikkelsen 2015 - 2025</Copyright>
     <Description>Entity Framework Core support for EventFlow</Description>
     <PackageTags>CQRS ES event sourcing EF Entity Framework Core</PackageTags>
     <RepositoryType>git</RepositoryType>
@@ -18,17 +14,14 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageReleaseNotes>UPDATED BY BUILD</PackageReleaseNotes>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.EntityFrameworkCore">
-      <Version>3.1.5</Version>
-    </PackageReference>
-  </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore">
-      <Version>3.1.1</Version>
+      <Version>8.0.11</Version>
     </PackageReference>
   </ItemGroup>
 

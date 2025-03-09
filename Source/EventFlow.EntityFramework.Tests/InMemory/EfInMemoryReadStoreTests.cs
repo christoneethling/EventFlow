@@ -26,6 +26,7 @@ using EventFlow.EntityFramework.Extensions;
 using EventFlow.EntityFramework.Tests.Model;
 using EventFlow.TestHelpers;
 using EventFlow.TestHelpers.Suites;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 namespace EventFlow.EntityFramework.Tests.InMemory
@@ -35,13 +36,16 @@ namespace EventFlow.EntityFramework.Tests.InMemory
     {
         protected override Type ReadModelType => typeof(ThingyReadModelEntity);
 
-        protected override IRootResolver CreateRootResolver(IEventFlowOptions eventFlowOptions)
+        protected override IServiceProvider Configure(IEventFlowOptions eventFlowOptions)
         {
-            return eventFlowOptions
+            eventFlowOptions
                 .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
-                .AddDbContextProvider<TestDbContext, InMemoryDbContextProvider>(Lifetime.Singleton)
-                .ConfigureForReadStoreTest()
-                .CreateResolver();
+                .AddDbContextProvider<TestDbContext, InMemoryDbContextProvider>(ServiceLifetime.Singleton)
+                .ConfigureForReadStoreTest();
+
+            var serviceProvider = base.Configure(eventFlowOptions);
+
+            return serviceProvider;
         }
     }
 }

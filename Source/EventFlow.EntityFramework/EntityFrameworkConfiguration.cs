@@ -19,44 +19,41 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 using System;
-using EventFlow.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace EventFlow.EntityFramework
+namespace EventFlow.EntityFramework;
+
+public class EntityFrameworkConfiguration : IEntityFrameworkConfiguration
 {
-    public class EntityFrameworkConfiguration : IEntityFrameworkConfiguration
+    private Action<IServiceCollection>? _registerBulkOperationConfiguration;
+    private Action<IServiceCollection>? _registerUniqueConstraintDetectionStrategy;
+    public static EntityFrameworkConfiguration New => new();
+
+    private EntityFrameworkConfiguration()
     {
-        private Action<IServiceRegistration> _registerUniqueConstraintDetectionStrategy;
-        private Action<IServiceRegistration> _registerBulkOperationConfiguration;
+        UseUniqueConstraintDetectionStrategy<DefaultUniqueConstraintDetectionStrategy>();
+        UseBulkOperationConfiguration<DefaultBulkOperationConfiguration>();
+    }
 
-        public static EntityFrameworkConfiguration New => new EntityFrameworkConfiguration();
+    public EntityFrameworkConfiguration UseBulkOperationConfiguration<T>()
+        where T : class, IBulkOperationConfiguration
+    {
+        _registerBulkOperationConfiguration = s => s.AddTransient<IBulkOperationConfiguration, T>();
+        return this;
+    }
 
-        private EntityFrameworkConfiguration()
-        {
-            UseUniqueConstraintDetectionStrategy<DefaultUniqueConstraintDetectionStrategy>();
-            UseBulkOperationConfiguration<DefaultBulkOperationConfiguration>();
-        }
+    public EntityFrameworkConfiguration UseUniqueConstraintDetectionStrategy<T>()
+        where T : class, IUniqueConstraintDetectionStrategy
+    {
+        _registerUniqueConstraintDetectionStrategy = s => s.AddTransient<IUniqueConstraintDetectionStrategy, T>();
+        return this;
+    }
 
-        void IEntityFrameworkConfiguration.Apply(IServiceRegistration serviceRegistration)
-        {
-            serviceRegistration.Register<IEntityFrameworkConfiguration>(s => this);
-            _registerUniqueConstraintDetectionStrategy(serviceRegistration);
-            _registerBulkOperationConfiguration(serviceRegistration);
-        }
-
-        public EntityFrameworkConfiguration UseBulkOperationConfiguration<T>()
-            where T : class, IBulkOperationConfiguration
-        {
-            _registerBulkOperationConfiguration = s => s.Register<IBulkOperationConfiguration, T>();
-            return this;
-        }
-
-        public EntityFrameworkConfiguration UseUniqueConstraintDetectionStrategy<T>()
-            where T : class, IUniqueConstraintDetectionStrategy
-        {
-            _registerUniqueConstraintDetectionStrategy = s => s.Register<IUniqueConstraintDetectionStrategy, T>();
-            return this;
-        }
+    void IEntityFrameworkConfiguration.Apply(IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddTransient<IEntityFrameworkConfiguration>(_ => this);
+        _registerUniqueConstraintDetectionStrategy!(serviceCollection);
+        _registerBulkOperationConfiguration!(serviceCollection);
     }
 }
