@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
@@ -15,6 +15,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageReleaseNotes>UPDATED BY BUILD</PackageReleaseNotes>
     <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
 
