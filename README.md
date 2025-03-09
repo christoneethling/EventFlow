@@ -65,7 +65,7 @@ The following list key characteristics of each version as well as its related br
     - 💀 `EventFlow.Autofac`
     - 💀 `EventFlow.DependencyInjection`
     - 🟠 `EventFlow.Elasticsearch`
-    - 🟠 `EventFlow.EntityFramework`
+    - 🟢 `EventFlow.EntityFramework`
     - 🟠 `EventFlow.EventStores.EventStore`
     - 🟢 `EventFlow.Hangfire`
     - 🟢 `EventFlow.MongoDB`
@@ -470,6 +470,10 @@ category.
 * [olholm](https://github.com/olholm): Current logo
 * [iconmonstr](https://iconmonstr.com/network-6-icon/): First logo
 * [JC008](https://github.com/JC008): License for Navicat Essentials for SQLite
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=eventflow/EventFlow&type=Date)](https://star-history.com/#eventflow/EventFlow&Date)
 
 ## License
 
