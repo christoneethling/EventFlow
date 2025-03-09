@@ -4,6 +4,7 @@
   [documentation](https://geteventflow.net/additional/source-generation/) for details
 * New: NuGet `EventFlow.SQLite` is now released as part of v1 and enables support for SQLite
 * New: NuGet `EventFlow.EntityFramework` now ported to v1 (thanks @MMonrad)
+* Fix: Upgrade `EventFlow.MongoDB` reference of `MongoDB.Driver` from `2.19.0` to `[3.0.0,4.0)` (thanks @tniessner)
 * Fix: Invoking `UseEventPersistence` now removes any previously registered event persistence. This
   fixes a service ordering issue in the following event store configurations
   - MongoDB
