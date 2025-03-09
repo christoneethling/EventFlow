@@ -8,7 +8,7 @@
     <Nullable>enable</Nullable>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <IncludeBuildOutput>false</IncludeBuildOutput>    
-    <Title>EventFlow.PostgreSql</Title>
+    <Title>EventFlow.SourceGenerators</Title>
     <Authors>Alexey Fedorov</Authors>
     <Company>Rasmus Mikkelsen</Company>
     <Copyright>Copyright (c) Rasmus Mikkelsen 2015 - 2025</Copyright>
@@ -16,6 +16,8 @@
     <PackageTags>CQRS ES event sourcing</PackageTags>
     <PackageReleaseNotes>UPDATED BY BUILD</PackageReleaseNotes>
     <IsPackable>true</IsPackable>
+    <SymbolPackageFormat></SymbolPackageFormat>
+    <IncludeSymbols>false</IncludeSymbols>
   </PropertyGroup>
 
   <ItemGroup>
