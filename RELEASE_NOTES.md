@@ -11,6 +11,8 @@
   - MSSQL
   - PostgreSQL
 
+*Sorry for the delay.*
+
 ### New in 1.1.0 (released 2024-12-16)
 
 * New: More control of event naming by introducing the interface `IEventNamingStrategy`, see the
