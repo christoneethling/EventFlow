@@ -74,7 +74,7 @@ The following list key characteristics of each version as well as its related br
     - 🟢 `EventFlow.MsSql`
     - 💀 `EventFlow.Owin`
     - 🟢 `EventFlow.PostgreSql`
-    - 💚 `EventFlow.Redis`
+    - 🟠 `EventFlow.Redis`
     - 🟠 `EventFlow.RabbitMQ`
     - 🟢 `EventFlow.Sql`
     - 🟢 `EventFlow.SQLite`
@@ -472,10 +472,6 @@ category.
 * [olholm](https://github.com/olholm): Current logo
 * [iconmonstr](https://iconmonstr.com/network-6-icon/): First logo
 * [JC008](https://github.com/JC008): License for Navicat Essentials for SQLite
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=eventflow/EventFlow&type=Date)](https://star-history.com/#eventflow/EventFlow&Date)
 
 ## License
 
