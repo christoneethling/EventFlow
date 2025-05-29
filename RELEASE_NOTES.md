@@ -1,6 +1,7 @@
 ### New in 1.2.1 (working version, not released yet)
 
 * Fix: Prevent multiple calls of the same async subscribers when dispatching events (by @alexeyfv)
+* Fix: Better exception handling and propagation in `ReadModelPopulator`
 
 ### New in 1.2.0 (released 2025-03-09)
 
