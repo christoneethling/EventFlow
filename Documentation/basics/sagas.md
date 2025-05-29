@@ -136,7 +136,7 @@ Each Saga has an internal ```State``` property that defines how it processes eve
   - Only events defined using ```ISagaIsStartedBy<>``` can be processed.
 - **Running**
   - Events defined using ```ISagaHandles<>``` will be processed.
-  - Events defined using ```ISagaIsStartedBy<>``` will also behave the same of ```ISagaHandles<>```.
+  - Events defined using ```ISagaIsStartedBy<>``` will also behave the same as ```ISagaHandles<>```.
 - **Completed**
   - No events will be processed by the Saga anymore.
 
