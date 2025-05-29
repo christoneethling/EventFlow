@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventFlow.Sql\EventFlow.Sql.csproj" />
-    <ProjectReference Include="..\EventFlow\EventFlow.csproj" />
   </ItemGroup>
 
 </Project>
