@@ -31,7 +31,6 @@ using NUnit.Framework;
 using Shouldly;
 
 // ReSharper disable StringLiteralTypo
-// ReSharper disable StringLiteralTypo
 
 namespace EventFlow.Tests
 {

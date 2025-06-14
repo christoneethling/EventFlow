@@ -36,13 +36,12 @@ using EventFlow.TestHelpers.Aggregates;
 using EventFlow.TestHelpers.Aggregates.Commands;
 using EventFlow.TestHelpers.Aggregates.Events;
 using EventFlow.TestHelpers.Aggregates.ValueObjects;
-using FluentAssertions;
-using FluentAssertions.Common;
 using Hangfire;
 using Hangfire.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.Hangfire.Tests.Integration
 {
@@ -113,7 +112,7 @@ namespace EventFlow.Hangfire.Tests.Integration
 
             // Assert
             var receivedPingId = await Task.Run(() => _testAsynchronousSubscriber.PingIds.Take(), cts.Token).ConfigureAwait(false);
-            receivedPingId.Should().IsSameOrEqualTo(pingId);
+            receivedPingId.ShouldBeSameAs(pingId);
         }
 
         [Test]
@@ -165,10 +164,10 @@ namespace EventFlow.Hangfire.Tests.Integration
         async Task AssertJobIsSuccessfullyAsync(IJobId jobId)
         {
             var context = await _log.GetAsync(jobId.Value);
-            context.Should().NotBeNull();
-            context.Exception.Should().BeNull();
+            context.ShouldNotBeNull();
+            context.Exception.ShouldBeNull();
             var displayName = context.BackgroundJob.Job.Args[0].ToString();
-            displayName.Should().Be("PublishCommand");
+            displayName.ShouldBe("PublishCommand");
         }
 
         [TearDown]
