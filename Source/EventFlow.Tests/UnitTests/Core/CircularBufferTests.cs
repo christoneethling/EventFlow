@@ -23,8 +23,8 @@
 using System.Linq;
 using EventFlow.Core;
 using EventFlow.TestHelpers;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.Tests.UnitTests.Core
 {
@@ -50,7 +50,7 @@ namespace EventFlow.Tests.UnitTests.Core
 
             // Assert
             var shouldContain = numbers.Reverse().Take(capacity).ToList();
-            sut.Should().Contain(shouldContain);
+            sut.ShouldBe(shouldContain);
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace EventFlow.Tests.UnitTests.Core
             var numbers = sut.ToArray();
 
             // Assert
-            numbers.Should().ContainInOrder(2, 3, 4);
+            numbers.ShouldBe(new[] {2, 3, 4}, ignoreOrder: false);
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace EventFlow.Tests.UnitTests.Core
             var numbers = sut.ToArray();
 
             // Assert
-            numbers.Should().ContainInOrder(1, 2, 3);
+            numbers.ShouldBe( new[] {1, 2, 3}, ignoreOrder: false);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace EventFlow.Tests.UnitTests.Core
             var numbers = sut.ToArray();
 
             // Assert
-            numbers.Should().ContainInOrder(1, 2);
+            numbers.ShouldBe(new[] {1, 2}, ignoreOrder: false);
         }
     }
 }
