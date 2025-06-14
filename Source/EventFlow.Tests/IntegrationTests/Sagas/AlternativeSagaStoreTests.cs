@@ -27,9 +27,9 @@ using EventFlow.Aggregates;
 using EventFlow.Extensions;
 using EventFlow.Sagas;
 using EventFlow.TestHelpers;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.Tests.IntegrationTests.Sagas
 {
@@ -87,9 +87,9 @@ namespace EventFlow.Tests.IntegrationTests.Sagas
             var testAggregate = await _aggregateStore.LoadAsync<AlternativeSagaStoreTestClasses.SagaTestAggregate, AlternativeSagaStoreTestClasses.SagaTestAggregateId>(
                 aggregateId,
                 CancellationToken.None);
-            testAggregate.As.Should().Be(1);
-            testAggregate.Bs.Should().Be(1);
-            testAggregate.Cs.Should().Be(1);
+            testAggregate.As.ShouldBe(1);
+            testAggregate.Bs.ShouldBe(1);
+            testAggregate.Cs.ShouldBe(1);
         }
 
         [Test]
@@ -107,9 +107,9 @@ namespace EventFlow.Tests.IntegrationTests.Sagas
             var testAggregate = await _aggregateStore.LoadAsync<AlternativeSagaStoreTestClasses.SagaTestAggregate, AlternativeSagaStoreTestClasses.SagaTestAggregateId>(
                 aggregateId,
                 CancellationToken.None);
-            testAggregate.As.Should().Be(0);
-            testAggregate.Bs.Should().Be(1);
-            testAggregate.Cs.Should().Be(0);
+            testAggregate.As.ShouldBe(0);
+            testAggregate.Bs.ShouldBe(1);
+            testAggregate.Cs.ShouldBe(0);
         }
 
         [Test]
