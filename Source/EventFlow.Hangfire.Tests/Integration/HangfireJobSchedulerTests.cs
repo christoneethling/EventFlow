@@ -112,7 +112,7 @@ namespace EventFlow.Hangfire.Tests.Integration
 
             // Assert
             var receivedPingId = await Task.Run(() => _testAsynchronousSubscriber.PingIds.Take(), cts.Token).ConfigureAwait(false);
-            receivedPingId.ShouldBeSameAs(pingId);
+            receivedPingId.ShouldBe(pingId);
         }
 
         [Test]
