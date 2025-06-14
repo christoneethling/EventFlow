@@ -138,7 +138,7 @@ namespace EventFlow.TestHelpers.Suites
 
             // Assert
             thingy.PingsReceived.ShouldBe(pingIds.Count);
-            returnedThingyMessages.SequenceEqual(thingyMessages).ShouldBeTrue();
+            returnedThingyMessages.ShouldBe(thingyMessages, ignoreOrder: true);
         }
 
         [Test]
@@ -331,7 +331,7 @@ namespace EventFlow.TestHelpers.Suites
 
             // Assert
             returnedThingyMessages.Count.ShouldBe(thingyMessages.Count);
-            returnedThingyMessages.SequenceEqual(thingyMessages).ShouldBeTrue();
+            returnedThingyMessages.ShouldBe(thingyMessages, ignoreOrder: true);
         }
 
         [TestCase(true, true)]

@@ -82,7 +82,7 @@ namespace EventFlow.EntityFramework.Tests.MsSql
             // Assert
             readModel.ShouldNotBeNull();
             readModel.Name.ShouldBe("Bob");
-            readModel.Addresses.ShouldBeNull();
+            readModel.Addresses.ShouldBeEmpty();
         }
 
         [Test]
