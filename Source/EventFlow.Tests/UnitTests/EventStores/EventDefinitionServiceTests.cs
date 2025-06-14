@@ -65,9 +65,21 @@ namespace EventFlow.Tests.UnitTests.EventStores
 
             // Assert
             eventDefinitions.Count.ShouldBe(3);
-            eventDefinitions
+    
+            var actualStrings = eventDefinitions
                 .Select(d => $"{d.Name}-V{d.Version}")
-                .ShouldBeEquivalentTo(new []{"multi-names-event-V1", "MultiNamesEvent-V1", "MultiNamesEvent-V2"});
+                .OrderBy(s => s)
+                .ToList();
+    
+            var expectedStrings = new[] 
+                {
+                    "multi-names-event-V1",
+                    "MultiNamesEvent-V1",
+                    "MultiNamesEvent-V2"
+                }.OrderBy(s => s)
+                .ToList();
+    
+            actualStrings.ShouldBe(expectedStrings);
         }
         
         [Test]

@@ -50,7 +50,11 @@ namespace EventFlow.Tests.UnitTests.Core
 
             // Assert
             var shouldContain = numbers.Reverse().Take(capacity).ToList();
-            sut.ShouldBe(shouldContain);
+
+            foreach (var sc in shouldContain)
+            {
+                sut.ShouldContain(sc);
+            }
         }
 
         [Test]

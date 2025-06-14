@@ -359,7 +359,7 @@ namespace EventFlow.TestHelpers.Suites
 
             // Assert
             aggregate1 = await LoadAggregateAsync(id);
-            aggregate1.PingsReceived.ShouldBeEquivalentTo(new[] {pingId1, pingId2});
+            aggregate1.PingsReceived.ShouldBe(new[] { pingId1, pingId2 });
         }
 
         [Test]
@@ -388,7 +388,7 @@ namespace EventFlow.TestHelpers.Suites
 
             // Assert
             var aggregate = await LoadAggregateAsync(id);
-            aggregate.PingsReceived.ShouldBeEquivalentTo(new []{pingId1, pingId2});
+            aggregate.PingsReceived.ShouldBe(new[] { pingId1, pingId2 });
         }
 
         [Test]
@@ -405,7 +405,7 @@ namespace EventFlow.TestHelpers.Suites
 
             // Assert
             PublishedDomainEvents.Count.ShouldBe(10);
-            PublishedDomainEvents.Select(d => d.AggregateSequenceNumber).ShouldBeEquivalentTo(Enumerable.Range(1, 10));
+            PublishedDomainEvents.Select(d => d.AggregateSequenceNumber).ShouldBe(Enumerable.Range(1, 10));
         }
 
         [Test]
@@ -426,7 +426,7 @@ namespace EventFlow.TestHelpers.Suites
 
             // Assert
             PublishedDomainEvents.Count.ShouldBe(10);
-            PublishedDomainEvents.Select(d => d.AggregateSequenceNumber).ShouldBeEquivalentTo(Enumerable.Range(11, 10));
+            PublishedDomainEvents.Select(d => d.AggregateSequenceNumber).ShouldBe(Enumerable.Range(11, 10));
         }
 
         [Test]

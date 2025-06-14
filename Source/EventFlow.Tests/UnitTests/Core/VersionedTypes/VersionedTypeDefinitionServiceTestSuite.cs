@@ -200,12 +200,18 @@ namespace EventFlow.Tests.UnitTests.Core.VersionedTypes
             var expectedTypes = Arrange_LoadAllTestTypes();
 
             // Act
-            var result = Sut.GetAllDefinitions().Select(d => d.Type)
+            var result = Sut.GetAllDefinitions()
+                .Select(d => d.Type)
                 .Distinct()
+                .OrderBy(t => t.FullName)
                 .ToList();
 
             // Assert
-            result.ShouldBeEquivalentTo(expectedTypes);
+            var expected = expectedTypes
+                .OrderBy(t => t.FullName) 
+                .ToList();
+    
+            result.ShouldBe(expected);
         }
 
         [Test]

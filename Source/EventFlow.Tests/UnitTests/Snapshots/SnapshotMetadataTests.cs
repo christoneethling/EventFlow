@@ -57,7 +57,7 @@ namespace EventFlow.Tests.UnitTests.Snapshots
             snapshotMetadata.AggregateSequenceNumber.ShouldBe(42);
             snapshotMetadata.SnapshotName.ShouldBe("thingy");
             snapshotMetadata.SnapshotVersion.ShouldBe(84);
-            snapshotMetadata.PreviousSourceIds.Select(s => s.Value).ShouldBeEquivalentTo("cool", "magic");
+            snapshotMetadata.PreviousSourceIds.Select(s => s.Value).ShouldBe(new [] { "cool", "magic" });
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace EventFlow.Tests.UnitTests.Snapshots
             deserializedSnapshotMetadata.AggregateSequenceNumber.ShouldBe(42);
             deserializedSnapshotMetadata.SnapshotName.ShouldBe("thingy");
             deserializedSnapshotMetadata.SnapshotVersion.ShouldBe(84);
-            deserializedSnapshotMetadata.PreviousSourceIds.Select(s => s.Value).ShouldBeEquivalentTo("cool", "magic");
+            deserializedSnapshotMetadata.PreviousSourceIds.Select(s => s.Value).ShouldBe(new [] { "cool", "magic" });
         }
 
         [Test]

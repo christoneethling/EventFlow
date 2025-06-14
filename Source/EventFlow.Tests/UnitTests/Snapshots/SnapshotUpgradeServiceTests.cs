@@ -66,8 +66,8 @@ namespace EventFlow.Tests.UnitTests.Snapshots
             // Assert
             snapshot.ShouldBeOfType<ThingySnapshot>();
             var thingySnapshot = (ThingySnapshot) snapshot;
-            thingySnapshot.PingsReceived.ShouldBeEquivalentTo(pingIds);
-            thingySnapshot.PreviousVersions.ShouldBeEquivalentTo(new[] {ThingySnapshotVersion.Version1, ThingySnapshotVersion.Version2});
+            thingySnapshot.PingsReceived.ShouldBe(pingIds, ignoreOrder: true);
+            thingySnapshot.PreviousVersions.ShouldBe(new[] { ThingySnapshotVersion.Version1, ThingySnapshotVersion.Version2 }, ignoreOrder: true);
         }
 
         private void Arrange_All_Upgraders()
