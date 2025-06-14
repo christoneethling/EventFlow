@@ -24,14 +24,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EventFlow.Aggregates;
-using EventFlow.Configuration;
 using EventFlow.Configuration.EventNamingStrategy;
 using EventFlow.Core;
 using EventFlow.EventStores;
 using EventFlow.TestHelpers;
 using EventFlow.Tests.UnitTests.Core.VersionedTypes;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.Tests.UnitTests.EventStores
 {
@@ -65,10 +64,10 @@ namespace EventFlow.Tests.UnitTests.EventStores
             var eventDefinitions = Sut.GetDefinitions(typeof(MultiNamesEvent));
 
             // Assert
-            eventDefinitions.Should().HaveCount(3);
+            eventDefinitions.Count.ShouldBe(3);
             eventDefinitions
                 .Select(d => $"{d.Name}-V{d.Version}")
-                .Should().BeEquivalentTo(new []{"multi-names-event-V1", "MultiNamesEvent-V1", "MultiNamesEvent-V2"});
+                .ShouldBeEquivalentTo(new []{"multi-names-event-V1", "MultiNamesEvent-V1", "MultiNamesEvent-V2"});
         }
         
         [Test]
@@ -82,13 +81,15 @@ namespace EventFlow.Tests.UnitTests.EventStores
             var eventDefinitions = Sut.GetDefinitions(typeof(MultiNamesEvent));
 
             // Assert
-            eventDefinitions.Should().HaveCount(3);
+            eventDefinitions.Count.ShouldBe(3);
             eventDefinitions
                 .Select(d => $"{d.Name}-V{d.Version}")
-                .Should().BeEquivalentTo(
+                .ShouldBe(new[]
+                {
                     "EventFlow.Tests.UnitTests.EventStores.MultiNamesEvent-V1",
                     "EventFlow.Tests.UnitTests.EventStores.MultiNamesEvent-V1",
-                    "EventFlow.Tests.UnitTests.EventStores.MultiNamesEvent-V2");
+                    "EventFlow.Tests.UnitTests.EventStores.MultiNamesEvent-V2"
+                }, ignoreOrder: true);
         }
 
         [EventVersion("Fancy", 42)]
