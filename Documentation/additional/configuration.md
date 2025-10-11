@@ -117,7 +117,7 @@ services.AddEventFlow(options =>
 });
 ```
 
-Raising the boundary ensures cancellation tokens are honoured while rebuilding read stores, but once the boundary is crossed EventFlow will run to completion to keep the event store and read models consistent.
+Raising the boundary ensures cancellation tokens are honored while rebuilding read stores, but once the boundary is crossed EventFlow will run to completion to keep the event store and read models consistent.
 
 ## Consuming configuration at runtime
 
