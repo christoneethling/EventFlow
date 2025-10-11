@@ -2,9 +2,9 @@
 
 * Fix: Use the ASP.NET Core shared framework reference for non-`netstandard` targets in `EventFlow.AspNetCore` to avoid redundant package references (thanks @thompson-tomo)
 * Fix: Replace FluentAssertions with Shouldly across the solution to simplify assertion usage (thanks @Focus1337)
-* Fix: Lean on framework-provided `Microsoft.CSharp` where available to trim redundant package references (thanks @thompson-tomo)
+* Fix: Lean on framework-provided `Microsoft.CSharp` where available to trim redundant package references (fixes #1107, thanks @thompson-tomo)
 * Fix: Cleaned up major parts of the documentation hosted on https://geteventflow.net/
-* Fix: Resolved Hangfire delayed job scheduling bug by switching to the correct `Schedule` API
+* Fix: Resolved Hangfire delayed job scheduling bug by switching to the correct `Schedule` API (fixes #1104)
 
 ### New in 1.2.1 (released 2025-05-29)
 
