@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -124,16 +125,23 @@ namespace EventFlow.Hangfire.Tests.Integration
         [Test]
         public async Task ScheduleAsyncWithDateTime()
         {
-            await ValidateScheduleHappens((j, s) => s.ScheduleAsync(j, DateTimeOffset.Now.AddSeconds(1), CancellationToken.None)).ConfigureAwait(false);
+            var minimumDelay = TimeSpan.FromSeconds(0.75);
+            var runAt = DateTimeOffset.UtcNow.AddSeconds(1);
+            await ValidateScheduleHappens(
+                (j, s) => s.ScheduleAsync(j, runAt, CancellationToken.None),
+                minimumDelay).ConfigureAwait(false);
         }
 
         [Test]
         public async Task ScheduleAsyncWithTimeSpan()
         {
-            await ValidateScheduleHappens((j, s) => s.ScheduleAsync(j, TimeSpan.FromSeconds(1), CancellationToken.None)).ConfigureAwait(false);
+            var minimumDelay = TimeSpan.FromSeconds(0.75);
+            await ValidateScheduleHappens(
+                (j, s) => s.ScheduleAsync(j, TimeSpan.FromSeconds(1), CancellationToken.None),
+                minimumDelay).ConfigureAwait(false);
         }
 
-        private async Task ValidateScheduleHappens(Func<IJob, IJobScheduler, Task<IJobId>> schedule)
+        private async Task ValidateScheduleHappens(Func<IJob, IJobScheduler, Task<IJobId>> schedule, TimeSpan? minimumElapsed = null)
         {
             // Arrange
             var testId = ThingyId.New;
@@ -141,23 +149,31 @@ namespace EventFlow.Hangfire.Tests.Integration
             var executeCommandJob = PublishCommandJob.Create(new ThingyPingCommand(testId, pingId), ServiceProvider);
 
             // Act
+            // Use a monotonic timer to avoid false negatives from wall-clock drift in CI.
+            var stopwatch = Stopwatch.StartNew();
             var jobId = await schedule(executeCommandJob, _jobScheduler).ConfigureAwait(false);
 
             // Assert
-            var start = DateTimeOffset.Now;
-            while (DateTimeOffset.Now < start + TimeSpan.FromSeconds(10))
+            while (stopwatch.Elapsed < TimeSpan.FromSeconds(10))
             {
                 var testAggregate = await AggregateStore.LoadAsync<ThingyAggregate, ThingyId>(testId, CancellationToken.None).ConfigureAwait(false);
                 if (!testAggregate.IsNew)
                 {
+                    var elapsed = stopwatch.Elapsed;
+                    stopwatch.Stop();
                     await AssertJobIsSuccessfullyAsync(jobId).ConfigureAwait(false);
+                    if (minimumElapsed.HasValue)
+                    {
+                        elapsed.ShouldBeGreaterThanOrEqualTo(minimumElapsed.Value);
+                    }
                     Assert.Contains(pingId, testAggregate.PingsReceived.ToList());
-                    Assert.Pass();
+                    return;
                 }
                 
                 await Task.Delay(TimeSpan.FromSeconds(0.2)).ConfigureAwait(false);
             }
 
+            stopwatch.Stop();
             Assert.Fail("Aggregate did not receive the command as expected");
         }
 
