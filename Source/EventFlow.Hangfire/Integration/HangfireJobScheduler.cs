@@ -71,7 +71,7 @@ namespace EventFlow.Hangfire.Integration
                 cancellationToken,
                 (jobDefinition, json) =>
                     _queueName == null
-                        ? _backgroundJobClient.Enqueue(ExecuteMethodCallExpression(jobDefinition, json))
+                        ? _backgroundJobClient.Schedule(ExecuteMethodCallExpression(jobDefinition, json), runAt)
                         : _backgroundJobClient.Schedule(_queueName, ExecuteMethodCallExpression(jobDefinition, json), runAt));
         }
 
@@ -82,7 +82,7 @@ namespace EventFlow.Hangfire.Integration
                 cancellationToken,
                 (jobDefinition, json) =>
                     _queueName == null
-                        ? _backgroundJobClient.Enqueue(ExecuteMethodCallExpression(jobDefinition, json))
+                        ? _backgroundJobClient.Schedule(ExecuteMethodCallExpression(jobDefinition, json), delay)
                         : _backgroundJobClient.Schedule(_queueName, ExecuteMethodCallExpression(jobDefinition, json), delay));
         }
 
