@@ -40,12 +40,15 @@ namespace EventFlow.Hangfire.Integration
         [Obsolete("For backwards compatibility with jobs enqueued before EventFlow 1.x. Use ExecuteAsync(string jobName, int version, string job).")]
         public Task ExecuteAsync(string displayName, string jobName, int version, string job)
         {
+            _ = displayName;
             return ExecuteAsync(jobName, version, job);
         }
 
         [Obsolete("For backwards compatibility with jobs enqueued before EventFlow 1.x. Use ExecuteAsync(string jobName, int version, string job).")]
         public Task ExecuteAsync(string displayName, string jobName, int version, string job, string queueName)
         {
+            _ = displayName;
+	        _ = queueName;
             return ExecuteAsync(jobName, version, job);
         }
 
