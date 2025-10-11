@@ -4,6 +4,7 @@
 * Fix: Replace FluentAssertions with Shouldly across the solution to simplify assertion usage (thanks @Focus1337)
 * Fix: Lean on framework-provided `Microsoft.CSharp` where available to trim redundant package references (thanks @thompson-tomo)
 * Fix: Cleaned up major parts of the documentation hosted on https://geteventflow.net/
+* Fix: Resolved Hangfire delayed job scheduling bug by switching to the correct `Schedule` API
 
 ### New in 1.2.1 (released 2025-05-29)
 
