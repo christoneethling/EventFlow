@@ -38,8 +38,8 @@ using EventFlow.TestHelpers;
 using EventFlow.TestHelpers.Aggregates;
 using EventFlow.TestHelpers.Aggregates.Events;
 using EventFlow.TestHelpers.Aggregates.ValueObjects;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.Tests.UnitTests.EventStores
 {
@@ -75,7 +75,7 @@ namespace EventFlow.Tests.UnitTests.EventStores
                 int.MaxValue,
                 new EventUpgradeContext(),
                 CancellationToken.None);
-            allEvents.DomainEvents.Count.Should().Be(NumberOfEvents * DegreeOfParallelism);
+            allEvents.DomainEvents.Count.ShouldBe(NumberOfEvents * DegreeOfParallelism);
         }
 
         private EventStoreBase CreateStore()

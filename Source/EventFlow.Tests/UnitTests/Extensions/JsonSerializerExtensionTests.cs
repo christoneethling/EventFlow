@@ -24,11 +24,11 @@ using EventFlow.Core;
 using EventFlow.Extensions;
 using EventFlow.TestHelpers;
 using EventFlow.ValueObjects;
-using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
 
 namespace EventFlow.Tests.UnitTests.Extensions
 {
@@ -79,11 +79,11 @@ namespace EventFlow.Tests.UnitTests.Extensions
                 var svoDeserialized = serializer.Deserialize<MySingleValueObject>(svoSerialized);
 
                 // Assert
-                myClassSerialized.Should().Be("1000000");
-                myClassDeserialized.DateTime.Ticks.Should().Be(1000000);
-                myClassDeserialized.DateTime.Ticks.Should().NotBe(10);
-                svoDeserialized.Should().Be(new MySingleValueObject(new DateTime(1970, 1, 1)));
-                svoDeserialized.Should().NotBe(new MySingleValueObject(new DateTime(2001, 1, 1)));
+                myClassSerialized.ShouldBe("1000000");
+                myClassDeserialized.DateTime.Ticks.ShouldBe(1000000);
+                myClassDeserialized.DateTime.Ticks.ShouldNotBe(10);
+                svoDeserialized.ShouldBe(new MySingleValueObject(new DateTime(1970, 1, 1)));
+                svoDeserialized.ShouldNotBe(new MySingleValueObject(new DateTime(2001, 1, 1)));
             }
         }
     }
