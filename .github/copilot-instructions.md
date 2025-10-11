@@ -1,5 +1,7 @@
 # Copilot Instructions for EventFlow
 
+These guidelines govern contributions within the EventFlow code base hosted at https://github.com/eventflow/EventFlow/. Follow them whenever collaborating in this repository to stay aligned with the project’s expectations.
+
 ## Architecture snapshot
 - EventFlow is a CQRS+ES framework; the core runtime lives in `Source/EventFlow` and exposes aggregates, commands, queries, read stores, sagas, jobs, and snapshots.
 - Command flow: clients call `CommandBus` (`Source/EventFlow/CommandBus.cs`) which resolves handlers, invokes aggregates deriving from `AggregateRoot<TAggregate, TIdentity>`, and emits events that pipe through subscribers and read-store dispatchers.
@@ -30,3 +32,8 @@
 - When wiring new persistence, register required DI services before calling `.UseEventPersistence<T>()` to avoid the `RemoveAll<IEventPersistence>()` guard removing your registration.
 - Keep public APIs binary compatible where possible; breaking changes require updates in `Documentation/` and `RELEASE_NOTES.md`.
 - Mirror existing namespace layout (`EventFlow.{Feature}`) and group files into folders matching their conceptual role to keep source generators and discovery heuristics effective.
+
+## Operational safeguards
+- Avoid invoking GitHub management tools that mutate remote state (issues, pull requests, repositories, projects, workflows, labels, security alerts, notifications, etc.) unless the user has granted explicit permission in the current conversation.
+- Never run mutating `git` commands (commit, push, merge, rebase, reset, clean, etc.) without explicit user authorization; limit `git` usage to read-only inspection by default.
+- If permission is unclear, pause and ask the user before attempting any action that could alter repository or GitHub state.
