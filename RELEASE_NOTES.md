@@ -5,6 +5,7 @@
 * Fix: Lean on framework-provided `Microsoft.CSharp` where available to trim redundant package references (fixes #1107, thanks @thompson-tomo)
 * Fix: Cleaned up major parts of the documentation hosted on https://geteventflow.net/
 * Fix: Resolved Hangfire delayed job scheduling bug by switching to the correct `Schedule` API (fixes #1104)
+* Fix: Restore Hangfire job runner backward compatibility with EventFlow 0.x by reintroducing legacy overloads (fixes #1109)
 
 ### New in 1.2.1 (released 2025-05-29)
 
