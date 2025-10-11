@@ -30,10 +30,9 @@ using EventFlow.Subscribers;
 using EventFlow.TestHelpers;
 using EventFlow.TestHelpers.Aggregates;
 using EventFlow.TestHelpers.Aggregates.Events;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.Tests.UnitTests.Subscribers
 {
@@ -118,7 +117,7 @@ namespace EventFlow.Tests.UnitTests.Subscribers
             var exception = Assert.Throws<AggregateException>(() => Sut.DispatchToSynchronousSubscribersAsync(new[] {A<DomainEvent<ThingyAggregate, ThingyId, ThingyPingEvent>>()}, CancellationToken.None).GetAwaiter().GetResult());
 
             // Assert
-            exception.InnerException.Should().BeSameAs(expectedException);
+            exception.InnerException.ShouldBeSameAs(expectedException);
             _logMock.VerifyNoProblems();
         }
 

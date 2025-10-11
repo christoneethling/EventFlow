@@ -23,8 +23,8 @@
 using System.Linq;
 using EventFlow.MsSql.EventStores;
 using EventFlow.TestHelpers;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.MsSql.Tests.IntegrationTests.EventStores
 {
@@ -38,9 +38,9 @@ namespace EventFlow.MsSql.Tests.IntegrationTests.EventStores
             var sqlScripts = EventFlowEventStoresMsSql.GetSqlScripts().ToDictionary(s => s.Name, s => s);
 
             // Assert
-            sqlScripts.Should().HaveCount(2);
-            sqlScripts.Should().ContainKey("EventStores.Scripts.0001 - Create table EventFlow.sql");
-            sqlScripts.Should().ContainKey("EventStores.Scripts.0002 - Create eventdatamodel_list_type.sql");
+            sqlScripts.Count.ShouldBe(2);
+            sqlScripts.ShouldContainKey("EventStores.Scripts.0001 - Create table EventFlow.sql");
+            sqlScripts.ShouldContainKey("EventStores.Scripts.0002 - Create eventdatamodel_list_type.sql");
         }
     }
 }

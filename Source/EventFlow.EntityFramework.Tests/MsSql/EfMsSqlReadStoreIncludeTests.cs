@@ -31,9 +31,9 @@ using EventFlow.EntityFramework.Tests.MsSql.IncludeTests.Queries;
 using EventFlow.Extensions;
 using EventFlow.TestHelpers;
 using EventFlow.TestHelpers.MsSql;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.EntityFramework.Tests.MsSql
 {
@@ -80,9 +80,9 @@ namespace EventFlow.EntityFramework.Tests.MsSql
                 .ConfigureAwait(false);
 
             // Assert
-            readModel.Should().NotBeNull();
-            readModel.Name.Should().Be("Bob");
-            readModel.Addresses.Should().BeNullOrEmpty();
+            readModel.ShouldNotBeNull();
+            readModel.Name.ShouldBe("Bob");
+            readModel.Addresses.ShouldBeEmpty();
         }
 
         [Test]
@@ -114,11 +114,21 @@ namespace EventFlow.EntityFramework.Tests.MsSql
                 .ConfigureAwait(false);
 
             // Assert
-            readModel.Should().NotBeNull();
-            readModel.NumberOfAddresses.Should().Be(2);
-            readModel.Addresses.Should().HaveCount(2);
-            readModel.Addresses.Should().ContainEquivalentOf(address1);
-            readModel.Addresses.Should().ContainEquivalentOf(address2);
+            readModel.ShouldNotBeNull();
+            readModel.NumberOfAddresses.ShouldBe(2);
+            readModel.Addresses.Count.ShouldBe(2);
+
+            readModel.Addresses.ShouldContain(a => 
+                a.Street == address1.Street && 
+                a.PostalCode == address1.PostalCode && 
+                a.City == address1.City && 
+                a.Country == address1.Country);
+
+            readModel.Addresses.ShouldContain(a => 
+                a.Street == address2.Street && 
+                a.PostalCode == address2.PostalCode && 
+                a.City == address2.City && 
+                a.Country == address2.Country);
         }
     }
 }
