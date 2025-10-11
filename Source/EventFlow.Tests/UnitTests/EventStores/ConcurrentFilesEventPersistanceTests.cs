@@ -38,9 +38,9 @@ using EventFlow.TestHelpers;
 using EventFlow.TestHelpers.Aggregates;
 using EventFlow.TestHelpers.Aggregates.Events;
 using EventFlow.TestHelpers.Aggregates.ValueObjects;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.Tests.UnitTests.EventStores
 {
@@ -103,7 +103,7 @@ namespace EventFlow.Tests.UnitTests.EventStores
             Action action = () => Task.WaitAll(tasks.ToArray());
 
             // Assert
-            action.Should().Throw<IOException>("because of concurrent access to the same files.");
+            action.ShouldThrow<IOException>("because of concurrent access to the same files.");
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace EventFlow.Tests.UnitTests.EventStores
             Action action = () => Task.WaitAll(tasks.ToArray());
 
             // Assert
-            action.Should().NotThrow();
+            action.ShouldNotThrow();
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace EventFlow.Tests.UnitTests.EventStores
             Action action = () => Task.WaitAll(tasks.ToArray());
 
             // Assert
-            action.Should().NotThrow();
+            action.ShouldNotThrow();
         }
 
         private IFilesEventStoreConfiguration ConfigurePath(string storePath)

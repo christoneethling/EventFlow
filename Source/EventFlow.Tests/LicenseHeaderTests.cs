@@ -27,8 +27,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EventFlow.TestHelpers;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 // ReSharper disable StringLiteralTypo
 
@@ -61,7 +61,7 @@ namespace EventFlow.Tests
             var sourceFiles = await Task.WhenAll(sourceFilesPaths.Select(GetSourceFileAsync));
 
             // Sanity asserts
-            sourceFiles.Should().HaveCountGreaterThan(700);
+            sourceFiles.Length.ShouldBeGreaterThan(700);
 
             // Missing headers
             var missingHeaders = sourceFiles
@@ -79,8 +79,8 @@ namespace EventFlow.Tests
             validationErrors.ForEach(Console.WriteLine);
 
             // Asserts
-            missingHeaders.Should().BeEmpty();
-            validationErrors.Should().BeEmpty();
+            missingHeaders.ShouldBeEmpty();
+            validationErrors.ShouldBeEmpty();
         }
 
         private static string PathRelativeTo(string root, string fullPath)

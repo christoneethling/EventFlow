@@ -25,9 +25,9 @@ using EventFlow.Aggregates.ExecutionResults;
 using EventFlow.Commands;
 using EventFlow.TestHelpers;
 using EventFlow.TestHelpers.Aggregates;
-using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.Tests.UnitTests.Commands
 {
@@ -55,9 +55,9 @@ namespace EventFlow.Tests.UnitTests.Commands
             var deserialized = JsonConvert.DeserializeObject<CriticalCommand>(json);
 
             // Assert
-            deserialized.CriticalData.Should().Be(criticalCommand.CriticalData);
-            deserialized.SourceId.Should().Be(criticalCommand.SourceId);
-            deserialized.AggregateId.Should().Be(criticalCommand.AggregateId);
+            deserialized.CriticalData.ShouldBe(criticalCommand.CriticalData);
+            deserialized.SourceId.ShouldBe(criticalCommand.SourceId);
+            deserialized.AggregateId.ShouldBe(criticalCommand.AggregateId);
         }
     }
 }

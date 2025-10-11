@@ -20,37 +20,15 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-using EventFlow.Examples.Shipping.Domain.Model.CargoModel.ValueObjects;
-using EventFlow.Examples.Shipping.Domain.Model.VoyageModel;
-using EventFlow.Examples.Shipping.ExternalServices.Routing;
-using EventFlow.TestHelpers;
-using NUnit.Framework;
-using Shouldly;
+using System;
 
-namespace EventFlow.Examples.Shipping.Tests.UnitTests.ExternalServices.Routing
+namespace EventFlow.Examples.Shipping.Tests;
+
+public static class DateTimeExtensions
 {
-    [Category(Categories.Unit)]
-    public class RoutingServiceTests : TestsFor<RoutingService>
-    {
-        [Test]
-        public void Itinerary()
-        {
-            // Arrange
-            var hongkongToNewYork = new Voyage(Voyages.HongkongToNewYorkId, Voyages.HongkongToNewYorkSchedule);
-            var newYorkToDallas = new Voyage(Voyages.NewYorkToDallasId, Voyages.NewYorkToDallasSchedule);
-
-            // Act
-            var itineraries = Sut.CalculateItineraries(
-                new Route(
-                    Locations.Tokyo,
-                    Locations.Chicago,
-                    1.October(2008).At(11, 00),
-                    1.January(2014)), 
-                new[] { hongkongToNewYork, newYorkToDallas });
-
-            // Assert
-            // TODO: Assert list of legs
-            itineraries.Count.ShouldBe(1);
-        }
-    }
+    public static DateTime October(this int day, int year) => new(year, 10, day);
+    public static DateTime November(this int day, int year) => new(year, 11, day);
+    public static DateTime January(this int day, int year) => new(year, 1, day);
+        
+    public static DateTime At(this DateTime date, int hours, int minutes) => new(date.Year, date.Month, date.Day, hours, minutes, 0);
 }

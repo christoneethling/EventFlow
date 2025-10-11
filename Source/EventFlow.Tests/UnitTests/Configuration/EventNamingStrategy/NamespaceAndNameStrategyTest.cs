@@ -21,9 +21,8 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using EventFlow.Configuration.EventNamingStrategy;
-using EventFlow.EventStores;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.Tests.UnitTests.Configuration.EventNamingStrategy
 {
@@ -41,7 +40,7 @@ namespace EventFlow.Tests.UnitTests.Configuration.EventNamingStrategy
             var name = strategy.CreateEventName(1, typeof(Any), "NameFromAttribute");
             
             // Assert
-            name.Should().Be(GetType().Namespace + ".NameFromAttribute");
+            name.ShouldBe(GetType().Namespace + ".NameFromAttribute");
         }
     }
 }
