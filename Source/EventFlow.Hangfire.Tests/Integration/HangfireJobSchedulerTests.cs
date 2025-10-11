@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -148,16 +149,18 @@ namespace EventFlow.Hangfire.Tests.Integration
             var executeCommandJob = PublishCommandJob.Create(new ThingyPingCommand(testId, pingId), ServiceProvider);
 
             // Act
-            var start = DateTimeOffset.UtcNow;
+            // Use a monotonic timer to avoid false negatives from wall-clock drift in CI.
+            var stopwatch = Stopwatch.StartNew();
             var jobId = await schedule(executeCommandJob, _jobScheduler).ConfigureAwait(false);
 
             // Assert
-            while (DateTimeOffset.UtcNow < start + TimeSpan.FromSeconds(10))
+            while (stopwatch.Elapsed < TimeSpan.FromSeconds(10))
             {
                 var testAggregate = await AggregateStore.LoadAsync<ThingyAggregate, ThingyId>(testId, CancellationToken.None).ConfigureAwait(false);
                 if (!testAggregate.IsNew)
                 {
-                    var elapsed = DateTimeOffset.UtcNow - start;
+                    var elapsed = stopwatch.Elapsed;
+                    stopwatch.Stop();
                     await AssertJobIsSuccessfullyAsync(jobId).ConfigureAwait(false);
                     if (minimumElapsed.HasValue)
                     {
@@ -170,6 +173,7 @@ namespace EventFlow.Hangfire.Tests.Integration
                 await Task.Delay(TimeSpan.FromSeconds(0.2)).ConfigureAwait(false);
             }
 
+            stopwatch.Stop();
             Assert.Fail("Aggregate did not receive the command as expected");
         }
 
