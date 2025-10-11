@@ -1,4 +1,4 @@
-### New in 1.2.3 (released 2025-10-11)
+### New in 1.2.3 (not released yet)
 
 - *Nothing yet...*
 
