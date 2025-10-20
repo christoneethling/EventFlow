@@ -1,6 +1,15 @@
-### New in 1.2.2 (working version, not released yet)
+### New in 1.2.3 (not released yet)
 
-* *Nothing yet...*
+- *Nothing yet...*
+
+### New in 1.2.2 (released 2025-10-11)
+
+* Fix: Use the ASP.NET Core shared framework reference for non-`netstandard` targets in `EventFlow.AspNetCore` to avoid redundant package references (thanks @thompson-tomo)
+* Fix: Replace FluentAssertions with Shouldly across the solution to simplify assertion usage (thanks @Focus1337)
+* Fix: Lean on framework-provided `Microsoft.CSharp` where available to trim redundant package references (fixes #1107, thanks @thompson-tomo)
+* Fix: Cleaned up major parts of the documentation hosted on https://geteventflow.net/
+* Fix: Resolved Hangfire delayed job scheduling bug by switching to the correct `Schedule` API (fixes #1104)
+* Fix: Restore Hangfire job runner backward compatibility with EventFlow 0.x by reintroducing legacy overloads (fixes #1109)
 
 ### New in 1.2.1 (released 2025-05-29)
 

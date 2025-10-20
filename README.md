@@ -75,7 +75,7 @@ The following list key characteristics of each version as well as its related br
     - 💀 `EventFlow.Owin`
     - 🟢 `EventFlow.PostgreSql`
     - 🟠 `EventFlow.Redis`
-    - 🟠 `EventFlow.RabbitMQ`
+    - 🟢 `EventFlow.RabbitMQ`
     - 🟢 `EventFlow.Sql`
     - 🟢 `EventFlow.SQLite`
     - 🟢 `EventFlow.TestHelpers`
@@ -503,5 +503,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
 
 

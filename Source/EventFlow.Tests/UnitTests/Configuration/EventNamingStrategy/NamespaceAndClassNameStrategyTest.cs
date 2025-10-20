@@ -22,8 +22,8 @@
 
 using EventFlow.Configuration.EventNamingStrategy;
 using EventFlow.TestHelpers;
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace EventFlow.Tests.UnitTests.Configuration.EventNamingStrategy
 {
@@ -42,7 +42,7 @@ namespace EventFlow.Tests.UnitTests.Configuration.EventNamingStrategy
             var name = strategy.CreateEventName(1, typeof(Any), "OriginalName");
             
             // Assert
-            name.Should().Be(GetType().Namespace + ".Any");
+            name.ShouldBe(GetType().Namespace + ".Any");
         }
     }
 }
