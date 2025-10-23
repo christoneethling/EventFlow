@@ -17,12 +17,8 @@ Have a look at our [getting started guide](getting-started.md), the [do’s and 
 * **No use of threads or background workers**
 * **MIT licensed:** Easy to understand and use license for enterprise
 
-!!! example
+!!! Warning
 
     **Documentation is still in progress for v1**
 
     If you have any suggestions for the documentation, even if it's just a typo, please create an issue or a pull request. Improvements to the documentation are always welcome.
-
-    Useful links for updating the documentation:
-
-    - [https://squidfunk.github.io/mkdocs-material/reference/](https://squidfunk.github.io/mkdocs-material/reference/)
