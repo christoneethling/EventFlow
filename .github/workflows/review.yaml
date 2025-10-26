@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   pipeline:
-    uses: rasmus/workflow-review/.github/workflows/pipeline.yaml@v1
+    uses: rasmus/workflow-review/.github/workflows/review.yaml@v2
     with:
       pull_request_number: ${{ github.event.issue.number }}
       allow_drafts: "true"
