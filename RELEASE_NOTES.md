@@ -1,6 +1,6 @@
-### New in 1.2.3 (not released yet)
+### New in 1.3.0 (not released yet)
 
-- *Nothing yet...*
+- New: Compiled and packaged for .NET 10
 
 ### New in 1.2.2 (released 2025-10-11)
 
