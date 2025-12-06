@@ -16,6 +16,7 @@ jobs:
     with:
       pull_request_number: ${{ github.event.issue.number }}
       allow_drafts: "true"
+      allow_forks: "true"
       allowlist: "rasmus"
       skip_ci: "true"
     secrets:
