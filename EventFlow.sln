@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32210.238
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11312.210 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventFlow", "Source\EventFlow\EventFlow.csproj", "{11131251-778D-4D2E-BDD1-4844A789BCA9}"
 EndProject
@@ -73,6 +73,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFlow.SourceGenerators", "Source\EventFlow.SourceGenerators\EventFlow.SourceGenerators.csproj", "{35098BEA-A0B8-4E63-8D71-35CE5297B459}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFlow.SourceGenerators.Tests", "Source\EventFlow.SourceGenerators.Tests\EventFlow.SourceGenerators.Tests.csproj", "{D8317769-F140-4E5D-9041-19342A3A33BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{F4D6C51D-1FC0-4AB6-A81C-282880F7D285}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -172,6 +174,10 @@ Global
 		{D8317769-F140-4E5D-9041-19342A3A33BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8317769-F140-4E5D-9041-19342A3A33BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8317769-F140-4E5D-9041-19342A3A33BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4D6C51D-1FC0-4AB6-A81C-282880F7D285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4D6C51D-1FC0-4AB6-A81C-282880F7D285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4D6C51D-1FC0-4AB6-A81C-282880F7D285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4D6C51D-1FC0-4AB6-A81C-282880F7D285}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
