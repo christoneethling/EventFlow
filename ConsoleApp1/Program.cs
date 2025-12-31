@@ -20,6 +20,7 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+using ConsoleApp1.QueryHandlers;
 using ConsoleApp1.ReadModels;
 using EventFlow;
 using EventFlow.Aggregates;
@@ -28,12 +29,14 @@ using EventFlow.Core;
 using EventFlow.Examples.Shipping;
 using EventFlow.Examples.Shipping.Domain.Model.CargoModel;
 using EventFlow.Examples.Shipping.Domain.Model.CargoModel.Commands;
+using EventFlow.Examples.Shipping.Domain.Model.CargoModel.Queries;
 using EventFlow.Examples.Shipping.Domain.Model.CargoModel.ValueObjects;
 using EventFlow.Examples.Shipping.Domain.Model.LocationModel;
 using EventFlow.Examples.Shipping.Domain.Model.VoyageModel;
 using EventFlow.Examples.Shipping.Domain.Model.VoyageModel.Commands;
 using EventFlow.Examples.Shipping.Domain.Model.VoyageModel.ValueObjects;
 using EventFlow.Extensions;
+using EventFlow.Queries;
 using EventFlow.SQLite.Connections;
 using EventFlow.SQLite.Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,6 +63,7 @@ var serviceProvider = EventFlowOptions.New()
     .UseSQLiteReadModel<VoyageReadModel>()
     .UseSQLiteReadModel<CargoReadModel>()
     .UseSQLiteReadModel<LocationReadModel>()
+    .RegisterServices(sr => sr.AddTransient<IQueryHandler<GetCargosDependentOnVoyageQuery, IReadOnlyCollection<Cargo>>, GetCargosDependentOnVoyageQueryHandler>())
     .ServiceCollection
     .BuildServiceProvider();
 
@@ -101,7 +105,9 @@ const string sqlCreateCargoTable = @"
         [CargoId] [nvarchar](64) NOT NULL,
         [OriginLocationId] [nvarchar](64) NOT NULL,
         [DestinationLocationId] [nvarchar](64) NOT NULL,
-        [ArrivalDeadline] [nvarchar](64) NOT NULL
+        [ArrivalDeadline] [nvarchar](64) NOT NULL,
+        [DependentVoyageIds] [nvarchar](512),
+        [ItineraryJson] [nvarchar](2048)
     )";
 
 const string sqlCreateLocationTable = @"
